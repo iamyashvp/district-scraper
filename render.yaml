@@ -3,7 +3,7 @@ services:
   - type: web
     name: district-scraper
     runtime: node
-    repo: https://github.com/your-org/district-scraper
+    repo: https://github.com/iamyashvp/district-scraper
     plan: free
     buildCommand: npm ci --omit=dev
     startCommand: node server.js
@@ -32,7 +32,7 @@ services:
   - type: worker
     name: district-scraper-worker
     runtime: docker
-    repo: https://github.com/your-org/district-scraper
+    repo: https://github.com/iamyashvp/district-scraper
     plan: starter
     dockerfilePath: ./worker/Dockerfile
     envVars:
