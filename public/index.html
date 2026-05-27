@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>District Scraper — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">DS</div>
+        <span class="brand-name">DistrictScraper</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" data-view="sources" onclick="switchView('sources')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Sources
+        </a>
+        <a href="#" class="nav-item" data-view="runs" onclick="switchView('runs')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Runs
+        </a>
+        <a href="#" class="nav-item" data-view="events" onclick="switchView('events')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Events
+        </a>
+        <a href="#" class="nav-item" data-view="failed" onclick="switchView('failed')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Failed Jobs
+        </a>
+        <a href="#" class="nav-item" data-view="analytics" onclick="switchView('analytics')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </a>
+        <a href="#" class="nav-item" data-view="settings" onclick="switchView('settings')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="version-badge">v1.0.0</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="top-header">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="search-bar">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" placeholder="Search sources, events, cities..." id="globalSearch" oninput="onSearch(this.value)">
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openScrapeDialog()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run Scraper
+          </button>
+          <button class="btn-icon" onclick="openNotifications()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-dot" id="notifDot"></span>
+          </button>
+          <div class="user-avatar" title="User">YP</div>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="dashboardContent">
+        <!-- Views rendered by JS -->
+      </div>
+
+      <!-- Scrape Dialog -->
+      <div class="dialog-overlay hidden" id="scrapeDialog" onclick="closeScrapeDialog(event)">
+        <div class="dialog" onclick="event.stopPropagation()">
+          <div class="dialog-header">
+            <h3>Run Scraper</h3>
+            <button class="btn-icon" onclick="closeScrapeDialog()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="dialog-body">
+            <div class="form-group">
+              <label>Select City</label>
+              <div class="city-select-wrapper">
+                <input type="text" class="form-input" id="scrapeCitySearch" placeholder="Type city name..." oninput="filterScrapeCities(this.value)">
+                <div class="city-select-dropdown" id="scrapeCityDropdown"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Source</label>
+              <select class="form-input" id="scrapeSource">
+                <option value="district.in">district.in</option>
+              </select>
+            </div>
+            <div class="dialog-actions">
+              <button class="btn btn-secondary" onclick="closeScrapeDialog()">Cancel</button>
+              <button class="btn btn-primary" id="scrapeSubmitBtn" onclick="submitScrape()">Start Scraping</button>
+            </div>
+          </div>
+          <div class="dialog-progress hidden" id="scrapeProgress">
+            <div class="progress-track">
+              <div class="progress-fill" id="scrapeProgressFill"></div>
+            </div>
+            <div class="progress-status" id="scrapeProgressStatus">Initializing...</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+      <!-- Event Detail Drawer / Inspector Panel -->
+      <div class="drawer-overlay hidden" id="eventDrawerOverlay" onclick="closeEventDrawer()"></div>
+      <div class="drawer hidden" id="eventDrawer">
+        <div class="drawer-header">
+          <div class="drawer-header-info">
+            <div class="drawer-event-name" id="drawerEventName"></div>
+            <div class="drawer-event-meta" id="drawerEventMeta"></div>
+          </div>
+          <div class="drawer-header-actions">
+            <button class="btn btn-sm btn-ghost" onclick="copyField('json')" title="Copy event data (C)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+            <button class="btn-icon" onclick="closeEventDrawer()" title="Close (Esc)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="drawer-tabs">
+          <button class="drawer-tab active" data-tab="overview" onclick="switchDrawerTab('overview')">Overview</button>
+          <button class="drawer-tab" data-tab="structured" onclick="switchDrawerTab('structured')">Structured</button>
+          <button class="drawer-tab" data-tab="raw" onclick="switchDrawerTab('raw')">Raw HTML</button>
+          <button class="drawer-tab" data-tab="logs" onclick="switchDrawerTab('logs')">Logs</button>
+          <button class="drawer-tab" data-tab="screenshot" onclick="switchDrawerTab('screenshot')">Screenshot</button>
+        </div>
+
+        <div class="drawer-body">
+          <div class="drawer-tab-content active" id="tab-overview">
+            <div class="drawer-panels">
+              <div class="drawer-panel drawer-panel-screenshot">
+                <div class="panel-title">Source Preview</div>
+                <div class="drawer-screenshot-container" id="drawerScreenshot"></div>
+              </div>
+              <div class="drawer-panel drawer-panel-data">
+                <div class="panel-title">Extracted Data</div>
+                <div class="drawer-fields" id="drawerFields"></div>
+              </div>
+              <div class="drawer-panel drawer-panel-sidebar">
+                <div class="drawer-actions-section">
+                  <div class="panel-title">Quick Actions</div>
+                  <div class="drawer-action-buttons" id="drawerActionButtons"></div>
+                </div>
+                <div class="drawer-copy-section">
+                  <div class="panel-title">Copy Data</div>
+                  <div class="copy-btn-group">
+                    <button class="btn btn-sm btn-ghost" onclick="copyField('json')">Copy JSON</button>
+                    <button class="btn btn-sm btn-ghost" onclick="copyField('structured')">Copy Structured</button>
+                    <button class="btn btn-sm btn-ghost" onclick="copyField('text')">Copy Raw Text</button>
+                    <button class="btn btn-sm btn-ghost" onclick="copyField('event')">Copy Event Card</button>
+                  </div>
+                </div>
+                <div class="drawer-timeline-section">
+                  <div class="panel-title">Activity Log</div>
+                  <div class="drawer-timeline" id="drawerTimeline"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drawer-tab-content" id="tab-structured">
+            <div class="structured-data-container" id="structuredDataContainer"><pre>Select an event to view structured data.</pre></div>
+          </div>
+
+          <div class="drawer-tab-content" id="tab-raw">
+            <pre class="raw-html-block" id="rawHtmlBlock">Raw HTML capture not available for this event. Enable HTML snapshot capture in Settings to view raw source.</pre>
+          </div>
+
+          <div class="drawer-tab-content" id="tab-logs">
+            <div class="logs-container" id="logsContainer"></div>
+          </div>
+
+          <div class="drawer-tab-content" id="tab-screenshot">
+            <div class="screenshot-full-container" id="screenshotFullContainer">
+              <div class="drawer-screenshot-placeholder">Select an event to view full screenshot.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-footer">
+          <button class="btn btn-success" onclick="approveEvent()" title="Approve (A)">✓ Approve</button>
+          <button class="btn btn-warning" onclick="editEvent()" title="Edit (E)">✎ Edit</button>
+          <button class="btn btn-error" onclick="rejectEvent()" title="Reject (R)">✕ Reject</button>
+          <button class="btn btn-ghost" onclick="rerunEvent()" title="Re-run">⟳ Re-run</button>
+        </div>
+        <div class="drawer-keyboard-hint"><kbd>J</kbd> <kbd>K</kbd> navigate · <kbd>A</kbd> approve · <kbd>R</kbd> reject · <kbd>E</kbd> edit · <kbd>C</kbd> copy · <kbd>Esc</kbd> close</div>
+      </div>
+
+  <div class="mobile-bottom-nav">
+    <a href="#" class="mnav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#" class="mnav-item" data-view="events" onclick="switchView('events')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Events</span>
+    </a>
+    <a href="#" class="mnav-item mnav-action" onclick="openScrapeDialog()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </a>
+    <a href="#" class="mnav-item" data-view="runs" onclick="switchView('runs')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span>Runs</span>
+    </a>
+    <a href="#" class="mnav-item" data-view="failed" onclick="switchView('failed')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <span>Failed</span>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
