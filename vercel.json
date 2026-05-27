@@ -1,9 +1,7 @@
 {
   "version": 2,
-  "functions": {
-    "api/**/*.js": {
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "http://50.6.249.30:3000/api/$1" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
