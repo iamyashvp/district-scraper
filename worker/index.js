@@ -1,7 +1,6 @@
 require('dotenv').config();
 
-const { Worker, Queue } = require('bullmq');
-const Redis = require('ioredis');
+const { Worker } = require('bullmq');
 const { createClient } = require('@supabase/supabase-js');
 const { runScraper, calculateConfidence } = require('./scraper');
 
@@ -40,11 +39,7 @@ const worker = new Worker('scraping', async (job) => {
 
   console.log(`[${runId}] Processing: ${cityName || city}`);
 
-  await updateRun(runId, {
-    status: 'running',
-    started_at: new Date().toISOString(),
-  });
-
+  await updateRun(runId, { status: 'running', started_at: new Date().toISOString() });
   await insertLog(runId, 'info', 'Job picked up by worker');
 
   const onLog = async (level, message) => {
@@ -65,17 +60,11 @@ const worker = new Worker('scraping', async (job) => {
     await insertLog(runId, 'ok', `Total ${allListings.length} listings extracted`);
 
     const eventRows = allListings.map((item) => ({
-      run_id: runId,
-      title: item.name,
-      date: item.date || null,
-      location: item.location || null,
-      price: item.price || null,
-      description: item.description || null,
-      image: item.image || null,
-      url: item.url || null,
-      event_type: item.eventType || 'Event',
-      confidence: calculateConfidence(item),
-      raw_data: item,
+      run_id: runId, title: item.name, date: item.date || null,
+      location: item.location || null, price: item.price || null,
+      description: item.description || null, image: item.image || null,
+      url: item.url || null, event_type: item.eventType || 'Event',
+      confidence: calculateConfidence(item), raw_data: item,
     }));
 
     if (eventRows.length > 0) {
@@ -86,11 +75,9 @@ const worker = new Worker('scraping', async (job) => {
     }
 
     await updateRun(runId, {
-      status: 'completed',
-      progress: 100,
+      status: 'completed', progress: 100,
       events_found: allListings.length,
       completed_at: new Date().toISOString(),
-      screenshot_url: null,
     });
 
     await insertLog(runId, 'ok', `Scrape completed — ${allListings.length} listings saved`);
@@ -100,12 +87,9 @@ const worker = new Worker('scraping', async (job) => {
   } catch (err) {
     console.error(`[${runId}] Failed:`, err.message);
 
-    await updateRun(runId, {
-      status: 'failed',
-      error: err.message,
-      completed_at: new Date().toISOString(),
-    });
+    const errorPayload = { status: 'failed', error: err.message, completed_at: new Date().toISOString() };
 
+    await updateRun(runId, errorPayload);
     await insertLog(runId, 'error', `Failed: ${err.message}`);
     throw err;
   }
@@ -134,6 +118,12 @@ console.log(`Worker connected to Redis at ${REDIS_HOST}:${REDIS_PORT}`);
 console.log('Waiting for scraping jobs...');
 
 process.on('SIGINT', async () => {
+  console.log('Shutting down...');
+  await worker.close();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
   console.log('Shutting down...');
   await worker.close();
   process.exit(0);

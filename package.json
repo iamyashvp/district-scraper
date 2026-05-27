@@ -12,6 +12,8 @@
     "@sparticuz/chromium": "^148.0.0",
     "@supabase/supabase-js": "^2.45.0",
     "@vercel/kv": "^2.0.0",
+    "@bull-board/api": "^5.0.0",
+    "@bull-board/express": "^5.0.0",
     "bullmq": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^5.2.1",

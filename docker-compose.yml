@@ -48,6 +48,8 @@ services:
       - REDIS_PORT=6379
       - NODE_ENV=production
       - PORT=3000
+    volumes:
+      - worker-screenshots:/app/worker/screenshots
 
 volumes:
   redis-data:
