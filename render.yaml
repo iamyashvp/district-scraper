@@ -60,3 +60,4 @@ services:
     name: district-queue
     plan: free
     maxmemoryPolicy: noeviction
+    ipAllowList: []
