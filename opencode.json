@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "district-scraper": {
+      "command": "node",
+      "args": ["mcp-server/index.js"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_SERVICE_KEY": "${SUPABASE_SERVICE_KEY}",
+        "VPS_API": "http://50.6.249.30:3000"
+      }
+    }
+  }
+}
