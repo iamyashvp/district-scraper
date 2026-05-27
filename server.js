@@ -8,9 +8,9 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const citiesHandler = require('./api/cities');
-const scrapeHandler = require('./api/scrape');
-const statusHandler = require('./api/status');
+const citiesHandler = require('./vps-api/cities');
+const scrapeHandler = require('./vps-api/scrape');
+const statusHandler = require('./vps-api/status');
 
 app.get('/api/cities', (req, res) => citiesHandler(req, res));
 app.post('/api/scrape', (req, res) => scrapeHandler(req, res));
@@ -21,7 +21,7 @@ try {
   const { createBullBoard } = require('@bull-board/api');
   const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
   const { ExpressAdapter } = require('@bull-board/express');
-  const { getQueue } = require('./api/queue');
+  const { getQueue } = require('./vps-api/queue');
 
   const q = getQueue();
   if (q) {
@@ -36,7 +36,7 @@ try {
 }
 
 app.get('/api/health', (req, res) => {
-  const { getQueue } = require('./api/queue');
+  const { getQueue } = require('./vps-api/queue');
   const q = getQueue();
   res.json({
     status: 'ok',
