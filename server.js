@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const cors = require('cors');
 
 const app = express();
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '50mb' }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -17,20 +19,14 @@ app.post('/api/scrape', (req, res) => scrapeHandler(req, res));
 
 app.get('/api/status', (req, res) => statusHandler(req, res));
 
-app.get('/api/data', (req, res) => {
-  const dataDir = path.join(__dirname, '.data');
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-  if (req.query.id) {
-    const file = path.join(dataDir, `${req.query.id}.json`);
-    if (!fs.existsSync(file)) return res.status(404).json({ error: 'Not found' });
-    return res.json(JSON.parse(fs.readFileSync(file, 'utf8')));
-  }
-  const files = fs.readdirSync(dataDir).sort().reverse().slice(0, 20);
-  const scrapes = files.map((f) => {
-    const data = JSON.parse(fs.readFileSync(path.join(dataDir, f), 'utf8'));
-    return { id: f.replace('.json', ''), title: data.title, url: data.url, scrapedAt: data.scrapedAt };
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    redis: !!process.env.REDIS_HOST || !!process.env.REDIS_URL,
+    supabase: !!process.env.SUPABASE_URL,
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
   });
-  res.json(scrapes);
 });
 
 app.get('/api/runs', async (req, res) => {
@@ -51,11 +47,28 @@ app.get('/api/runs', async (req, res) => {
   return res.json({ runs: [] });
 });
 
+app.get('/api/events', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    if (supabaseUrl && supabaseKey) {
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const limit = Math.min(parseInt(req.query.limit || '50'), 200);
+      const { data, error } = await supabase
+        .from('scraped_events')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      if (!error) return res.json({ events: data });
+    }
+  } catch {}
+  return res.json({ events: [] });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`District Scraper running at http://localhost:${PORT}`);
-  if (!process.env.REDIS_URL && !process.env.REDIS_HOST) {
-    console.log('Note: REDIS not configured. Scraping API will return 503.');
-    console.log('Set REDIS_URL or REDIS_HOST/REDIS_PORT for worker-backed scraping.');
-  }
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`District Scraper API running on port ${PORT}`);
+  console.log(`Redis: ${process.env.REDIS_HOST || 'not configured'}`);
+  console.log(`Supabase: ${process.env.SUPABASE_URL ? 'connected' : 'not configured'}`);
 });

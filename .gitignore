@@ -7,5 +7,6 @@ node_modules/
 .DS_Store
 docker/data/
 .docker/
-
 .vercel
+worker/screenshots/
+worker/html/

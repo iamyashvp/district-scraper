@@ -51,7 +51,7 @@ function addRun(slug, status, eventCount) {
 
 async function loadCities() {
   try {
-    const res = await fetch('/api/cities');
+    const res = await fetch(API_BASE + '/api/cities');
     const data = await res.json();
     cities = data.cities || [];
     renderDashboard();
@@ -609,7 +609,7 @@ async function submitScrape() {
   try {
     document.getElementById('scrapeProgressStatus').textContent = 'Queuing scrape job...';
 
-    const res = await fetch('/api/scrape', {
+    const res = await fetch(API_BASE + '/api/scrape', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ city: slug }),
@@ -652,7 +652,7 @@ async function pollJobStatus(jobId, slug, btn) {
   const poll = setInterval(async () => {
     attempts++;
     try {
-      const res = await fetch(`/api/status?id=${jobId}`);
+      const res = await fetch(API_BASE + `/api/status?id=${jobId}`);
       const data = await res.json();
 
       if (!data.run) {

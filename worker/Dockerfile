@@ -7,6 +7,8 @@ RUN npm ci --only=production
 
 COPY . .
 
+RUN mkdir -p screenshots html
+
 ENV NODE_ENV=production
 
 CMD ["node", "index.js"]

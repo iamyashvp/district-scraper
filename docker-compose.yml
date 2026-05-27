@@ -1,56 +1,55 @@
-version: "3.8"
+version: '3.9'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: district-postgres
+  redis:
+    image: redis:7-alpine
+    container_name: district-redis
     restart: unless-stopped
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${PG_USER:-district}
-      POSTGRES_PASSWORD: ${PG_PASSWORD:-district123}
-      POSTGRES_DB: ${PG_DB:-district_scraper}
+      - "6379:6379"
     volumes:
-      - E:\docker\data\postgres:/var/lib/postgresql/data
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
-  mongodb:
-    image: mongo:7
-    container_name: district-mongo
+  worker:
+    build: ./worker
+    container_name: district-worker
     restart: unless-stopped
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-district}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-district123}
-      MONGO_INITDB_DATABASE: ${MONGO_DB:-district_scraper}
-    volumes:
-      - E:\docker\data\mongodb:/data/db
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: district-pgadmin
-    restart: unless-stopped
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@district.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
-    volumes:
-      - E:\docker\data\pgadmin:/var/lib/pgadmin
     depends_on:
-      - postgres
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - worker-screenshots:/app/screenshots
+      - worker-html:/app/html
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - NODE_ENV=production
 
-  mongo-express:
-    image: mongo-express:latest
-    container_name: district-mongo-express
+  api:
+    build: .
+    container_name: district-api
     restart: unless-stopped
     ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER:-district}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD:-district123}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER:-district}:${MONGO_PASSWORD:-district123}@mongodb:27017/
+      - "3000:3000"
     depends_on:
-      - mongodb
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - NODE_ENV=production
+      - PORT=3000
+
+volumes:
+  redis-data:
+  worker-screenshots:
+  worker-html:
